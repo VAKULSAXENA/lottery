@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.11;
+pragma solidity ^0.8.4;
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
 contract Lottery is VRFConsumerBase {
@@ -50,3 +50,8 @@ contract Lottery is VRFConsumerBase {
         players = new address payable[](0);
     }
 }
+
+
+
+
+// Lottery address on rinkeby: 0xFC1187dA8Ae40a55AA360C6cbb1DD2492BD2D76E
