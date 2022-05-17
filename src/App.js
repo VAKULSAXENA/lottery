@@ -3,6 +3,7 @@ import React,{ useEffect, useState } from 'react';
 import lottery from './lottery';
 import './App.css';
 import web3 from './web3';
+import {TailSpin} from 'react-loader-spinner';
 
 function App() {
   const [owner,setOwner] = useState("")
@@ -57,7 +58,7 @@ function App() {
       from:accounts[0],
     });
     setLoader(false);
-    
+
   }
 
   const onEnter = ()=>{
@@ -83,6 +84,10 @@ function App() {
       <hr/>
       <h4>Ready to pick a winner</h4>
       <button onClick={onClick}>Pick a winner</button>
+      <hr/>
+      {loader ? <TailSpin color='#00BFFF' height={80} width={80}/>:(
+        <h1>{message}</h1>
+      )}
     </div>
   );
 }
