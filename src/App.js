@@ -2,7 +2,7 @@
 import React,{ useEffect, useState } from 'react';
 import lottery from './lottery';
 import './App.css';
-import Web3 from "web3";
+import web3 from './web3';
 import {TailSpin} from 'react-loader-spinner';
 
 function App() {
@@ -12,8 +12,7 @@ function App() {
   const [value,setValue] = useState("")
   const [message,setMessage] = useState("")
   const [loader,setLoader] = useState("")
-  const[web3,setWeb3] = useState()
-  const[address,setAddress] = useState()
+  
 
   const getOwner=async()=>{
     const owner = await lottery.methods.owner().call();
@@ -22,7 +21,7 @@ function App() {
 
   // const getPlayers=async()=>{
   //   const players = await lottery.methods.players().call();
-  //   setPlayers(players);
+  //  setPlayers(players);
   // }
 
   const getBalance=async()=>{
@@ -31,8 +30,8 @@ function App() {
 
   useEffect(() => {
     getOwner();
-    // getPlayers();
-    getBalance();
+    //getPlayers();
+   getBalance();
     return () => {
       
     }
@@ -43,10 +42,16 @@ function App() {
     if(typeof window !== 'undefined' && typeof window.ethereum !=='undefined'){
       try {
         await window.ethereum.request({method:"eth_requestAccounts"})
-        const web3 = new Web3(window.ethereum);
-        setWeb3(web3);
+     
         const accounts = await web3.eth.getAccounts();
-        setAddress(accounts[0]);
+
+        await lottery.methods.enter().send(
+          {
+            from:accounts[0],
+            value:web3.utils.toWei(value,'ether'),
+          }
+        )
+
         console.log(accounts);
       } catch (error) {
         console.log(error.message);
@@ -56,12 +61,7 @@ function App() {
     }
    
   
-    await lottery.methods.enter().send(
-      {
-        from:address[0],
-        value:web3.utils.toWei(value,'ether'),
-      }
-    )
+   
     setLoader(!loader);
     setMessage("you have been entered!");
   }
@@ -85,7 +85,7 @@ function App() {
     <div>
       <h2>Lottery Contract</h2>
       <p> This Contract is managed by {owner}
-      <br/> There are currently {players.length} people enter to win {web3.utils.fromWei(balance,'ether')} ether!
+       <br/> There are currently {players.length} people enter to win {web3.utils.fromWei(balance,'ether')} ether! 
       </p>
       <hr/>
       <form onSubmit={onSubmit}>
